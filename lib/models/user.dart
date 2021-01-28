@@ -10,6 +10,8 @@ class UserModel {
   static const PAYSTACK_ID = "paystackId";
   static const CART = "cart";
   static const ACTIVE_CARD = "activeCard";
+  static const IS_ADMIN = "isAdmin";
+  static const IS_SUPER_ADMIN = "isSuperAdmin";
 
 
   String _name;
@@ -19,6 +21,8 @@ class UserModel {
   String _paystackId;
   String _activeCard;
   int _priceSum = 0;
+  bool _isAdmin;
+  bool _isSuperAdmin;
 
 
 //  getters
@@ -39,6 +43,11 @@ class UserModel {
   int totalCartPrice;
 
 
+  bool get isAdmin => _isAdmin;
+
+  bool get isSuperAdmin => _isSuperAdmin;
+
+
 
   UserModel.fromSnapshot(DocumentSnapshot snapshot) {
     _name = snapshot.data()[NAME];
@@ -49,6 +58,8 @@ class UserModel {
     cart = _convertCartItems(snapshot.data()[CART]?? []);
     totalCartPrice = snapshot.data()[CART] == null ? 0 :getTotalPrice(cart: snapshot.data()[CART]);
     _activeCard = snapshot.data()[ACTIVE_CARD] ?? null;
+    _isAdmin = snapshot.data()[IS_ADMIN] ?? false;
+    _isSuperAdmin = snapshot.data()[IS_SUPER_ADMIN] ?? false;
 
   }
 

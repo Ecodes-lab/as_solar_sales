@@ -1,5 +1,6 @@
 import 'package:as_solar_sales/helpers/common.dart';
 import 'package:as_solar_sales/helpers/style.dart';
+import 'package:as_solar_sales/provider/app.dart';
 import 'package:as_solar_sales/provider/product.dart';
 import 'package:as_solar_sales/provider/user.dart';
 import 'package:as_solar_sales/screens/product_search.dart';
@@ -15,6 +16,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
+import '../main.dart';
 import 'cart.dart';
 import 'manage_cards.dart';
 import 'order.dart';
@@ -25,6 +27,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
+
 class _HomePageState extends State<HomePage> {
   final _key = GlobalKey<ScaffoldState>();
   StripeServices stripe = StripeServices();
@@ -34,9 +37,11 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final productProvider = Provider.of<ProductProvider>(context);
-    ChangeNotifierProvider.value(
-      value: ProductProvider.initialize(),
-    );
+    _refreshAction() {
+      setState(() {
+        productProvider.loadProducts();
+      });
+    }
     return Scaffold(
       key: _key,
       backgroundColor: white,
@@ -280,6 +285,11 @@ class _HomePageState extends State<HomePage> {
             )
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _refreshAction,
+        child: Icon(Icons.refresh),
+        backgroundColor: Colors.black,
       ),
     );
   }

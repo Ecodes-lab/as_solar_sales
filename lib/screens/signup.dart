@@ -4,6 +4,7 @@ import 'package:as_solar_sales/provider/user.dart';
 import 'package:as_solar_sales/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../main.dart';
 import 'home.dart';
 
 class SignUp extends StatefulWidget {
@@ -165,10 +166,10 @@ class _SignUpState extends State<SignUp> {
                                 onPressed: () async{
                                   if(_formKey.currentState.validate()){
                                     if(!await user.signUp(_name.text ,_email.text, _password.text)){
-                                      _key.currentState.showSnackBar(SnackBar(content: Text("Sign up failed")));
+                                      _key.currentState.showSnackBar(SnackBar(content: Text(user.message)));
                                       return;
                                     }
-                                    changeScreenReplacement(context, HomePage());
+                                    changeScreenReplacement(context, ScreensController());
                                   }
                                 },
                                 minWidth: MediaQuery.of(context).size.width,

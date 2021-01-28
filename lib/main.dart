@@ -1,3 +1,4 @@
+import 'package:as_solar_sales/screens/confirm_email.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:as_solar_sales/provider/app.dart';
@@ -41,6 +42,8 @@ class ScreensController extends StatelessWidget {
         return Login();
       case Status.Authenticated:
         return HomePage();
+      case Status.ConfirmEmail:
+        return ConfirmEmail();
       default: return Login();
     }
   }
@@ -73,6 +76,7 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
     );
   }
 }
+
 
 
 
