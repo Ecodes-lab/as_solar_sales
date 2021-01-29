@@ -59,7 +59,7 @@ class _SplashScreenWidgetState extends State<SplashScreenWidget> {
   @override
   Widget build(BuildContext context) {
     return new SplashScreen(
-      seconds: 14,
+      seconds: 2,
       photoSize: 200.0,
       // useLoader: false,
 
