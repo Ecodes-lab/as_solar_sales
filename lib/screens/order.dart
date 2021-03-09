@@ -141,25 +141,7 @@ class MyOrder extends StatelessWidget {
               )
             ],
           );
-          // _order.cart.map((e) {
-          //   // print(e['price']);
-          //   // return Text("${e['price']}");
-          //   return ListTile(
-          //     leading: CustomText(text: "${e["price"]}"),
-          //     title: Text(e["name"]),
-          //     subtitle: Text("Order id: asdasdasdasd \n Putchased on: ${DateTime.fromMillisecondsSinceEpoch(userProvider.orders[index].createdAt).toString()}"),
-          //     trailing: Icon(Icons.more_horiz),
-          //     // onTap: (){
-          //     //
-          //     // },
-          //   );
-          //
-          // }).toList();
-          // return;
         },
-        // separatorBuilder: (BuildContext context, int index) {
-        //   return Divider();
-        // },
       )
     );
   }

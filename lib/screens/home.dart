@@ -3,6 +3,7 @@ import 'package:as_solar_sales/helpers/style.dart';
 import 'package:as_solar_sales/provider/app.dart';
 import 'package:as_solar_sales/provider/product.dart';
 import 'package:as_solar_sales/provider/user.dart';
+import 'package:as_solar_sales/screens/category.dart';
 import 'package:as_solar_sales/screens/product_search.dart';
 import 'package:as_solar_sales/screens/test_credit_card.dart';
 import 'package:as_solar_sales/services/product.dart';
@@ -49,7 +50,7 @@ class _HomePageState extends State<HomePage> {
         child: ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              decoration: BoxDecoration(color: black),
+              decoration: BoxDecoration(color: Colors.green[900]),
               accountName: Text(
                 "${userProvider.userModel?.name}".toUpperCase() ?? "username lading...",
                 style: GoogleFonts.lato(textStyle: TextStyle(
@@ -78,6 +79,20 @@ class _HomePageState extends State<HomePage> {
               leading: Icon(Icons.bookmark_border),
               title: Text(
                 "ORDERS",
+                style: GoogleFonts.lato(textStyle: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 17
+                )),
+              ),
+            ),
+            ListTile(
+              onTap: () async{
+                await userProvider.getOrders();
+                changeScreen(context, CategoryScreen());
+              },
+              leading: Icon(Icons.lightbulb_outline),
+              title: Text(
+                "CATEGORY",
                 style: GoogleFonts.lato(textStyle: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 17
@@ -168,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             _key.currentState.openEndDrawer();
                           },
-                          child: Icon(Icons.menu))),
+                          child: Icon(Icons.menu, color: Colors.green[700],))),
                 ),
                 Positioned(
                   top: 10,
@@ -179,7 +194,7 @@ class _HomePageState extends State<HomePage> {
                           onTap: (){
                             changeScreen(context, CartScreen());
                           },
-                          child: Icon(Icons.shopping_cart))),
+                          child: Icon(Icons.shopping_cart, color: Colors.green[700],))),
                 ),
                 Positioned(
                   top: 10,
@@ -190,7 +205,7 @@ class _HomePageState extends State<HomePage> {
                         _key.currentState.showSnackBar(SnackBar(
                             content: Text("User profile")));
                       },
-                      child: Icon(Icons.person))),
+                      child: Icon(Icons.person, color: Colors.green[700],))),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -226,7 +241,7 @@ class _HomePageState extends State<HomePage> {
                   child: ListTile(
                     leading: Icon(
                       Icons.search,
-                      color: black,
+                      color: Colors.green,
                     ),
                     title: TextField(
                       textInputAction: TextInputAction.search,
@@ -289,7 +304,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _refreshAction,
         child: Icon(Icons.refresh),
-        backgroundColor: Colors.black,
+        backgroundColor: Colors.orange[700],
       ),
     );
   }

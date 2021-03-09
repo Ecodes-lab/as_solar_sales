@@ -13,7 +13,10 @@ class ProductModel {
   static const BRAND = "brand";
   static const SALE = "sale";
   static const SIZE = "size";
-  static const COLORS = "colors";
+  static const FRANCHISE = "franchise";
+  static const IBO = "ibo";
+  static const AGENT = "agent";
+  // static const COLORS = "colors";
 
   String _id;
   String _name;
@@ -24,9 +27,12 @@ class ProductModel {
   String _size;
   int _quantity;
   int _price;
+  int _franchise;
+  int _ibo;
+  int _agent;
   bool _sale;
   bool _featured;
-  List _colors;
+  // List _colors;
   List _images;
 
   String get id => _id;
@@ -47,11 +53,17 @@ class ProductModel {
 
   int get price => _price;
 
+  int get franchise => _franchise;
+
+  int get ibo => _ibo;
+
+  int get agent => _agent;
+
   bool get featured => _featured;
 
   bool get sale => _sale;
 
-  List get colors => _colors;
+  // List get colors => _colors;
 
   List get images => _images;
 
@@ -63,8 +75,11 @@ class ProductModel {
     _description = snapshot.data()[DESCRIPTION] ?? " ";
     _featured = snapshot.data()[FEATURED] ?? true;
     _price = snapshot.data()[PRICE].floor() ?? 0;
+    _franchise = snapshot.data()[FRANCHISE].floor() ?? 0;
+    _ibo = snapshot.data()[IBO].floor() ?? 0;
+    _agent = snapshot.data()[AGENT].floor() ?? 0;
     _category = snapshot.data()[CATEGORY] ?? " ";
-    _colors = snapshot.data()[COLORS] ?? [];
+    // _colors = snapshot.data()[COLORS] ?? [];
     _size = snapshot.data()[SIZE] ?? " ";
     _name = snapshot.data()[NAME] ?? " ";
     _picture = snapshot.data()[PICTURE] ?? " ";

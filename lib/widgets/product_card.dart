@@ -24,7 +24,7 @@ class ProductCard extends StatelessWidget {
         },
         child: Container(
           decoration: BoxDecoration(
-              color: white,
+              color: Colors.green[800],
               borderRadius: BorderRadius.circular(20),
               boxShadow: [
                 BoxShadow(
@@ -66,17 +66,18 @@ class ProductCard extends StatelessWidget {
                 text: TextSpan(children: [
                   TextSpan(
                     text: '${product.name} \n'.toUpperCase(),
-                    style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 15, fontWeight: FontWeight.w700)),
+                    style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.white, fontWeight: FontWeight.w700)),
                   ),
                   TextSpan(
                     text: 'by: ${product.brand} \n\n\n\n',
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                    style: TextStyle(color: Colors.white70),
                   ),
                   TextSpan(
                     text: 'NGN ${product.price / 100} \t',
                     style: GoogleFonts.lato(textStyle: TextStyle(
+                          color: Colors.white,
                           fontWeight: FontWeight.w700,
-                          fontSize: 15
+                          // fontSize: 15
                       )),
                     // style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
@@ -85,8 +86,8 @@ class ProductCard extends StatelessWidget {
 
                     style: GoogleFonts.lato(textStyle: TextStyle(
                         fontWeight: FontWeight.w400,
-                        fontSize: 15,
-                        color: Colors.red
+                        // fontSize: 15,
+                        color: Colors.orange[200]
                     )),
                     // TextStyle(
                     //     fontSize: 18,

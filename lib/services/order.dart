@@ -1,4 +1,4 @@
-  import 'package:as_solar_sales/models/cart_item.dart';
+import 'package:as_solar_sales/models/cart_item.dart';
 import 'package:as_solar_sales/models/order.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 

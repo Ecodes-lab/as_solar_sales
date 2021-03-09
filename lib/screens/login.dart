@@ -138,7 +138,7 @@ class _LoginState extends State<Login> {
                                 onPressed: () async{
                                   if(_formKey.currentState.validate()){
                                     if(!await user.signIn(_email.text, _password.text))
-                                      _key.currentState.showSnackBar(SnackBar(content: Text(user.message)));
+                                      _key.currentState.showSnackBar(SnackBar(content: Text(user.message), duration: Duration(milliseconds: 5000),));
                                   }
                                 },
                                 minWidth: MediaQuery.of(context).size.width,

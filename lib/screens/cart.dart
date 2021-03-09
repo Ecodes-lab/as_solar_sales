@@ -4,10 +4,13 @@ import 'package:as_solar_sales/helpers/common.dart';
 import 'package:as_solar_sales/helpers/style.dart';
 import 'package:as_solar_sales/models/cart_item.dart';
 import 'package:as_solar_sales/provider/app.dart';
+import 'package:as_solar_sales/provider/product.dart';
+import 'package:as_solar_sales/provider/product.dart';
 import 'package:as_solar_sales/provider/user.dart';
 import 'package:as_solar_sales/services/order.dart';
 import 'package:as_solar_sales/services/paystack.dart';
 import 'package:as_solar_sales/services/paystack.dart';
+import 'package:as_solar_sales/services/product.dart';
 import 'package:as_solar_sales/services/stripe.dart';
 import 'package:as_solar_sales/widgets/custom_text.dart';
 import 'package:as_solar_sales/widgets/loading.dart';
@@ -118,23 +121,26 @@ class _CartScreenState extends State<CartScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              RichText(
-                                text: TextSpan(children: [
-                                  TextSpan(
-                                      text: "${userProvider.userModel.cart[index].name}".toUpperCase() +"\n",
-                                      style: GoogleFonts.lato(textStyle: TextStyle(
-                                          color: black,
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.bold))),
-                                  TextSpan(
-                                      text:
-                                          "\$${userProvider.userModel.cart[index].price / 100} \n\n",
-                                          style: GoogleFonts.lato(textStyle: TextStyle(
-                                            color: Colors.grey[700],
-                                            fontWeight: FontWeight.w400,
-                                            fontSize: 18),
-                                          )),
-                                ]),
+                              Flexible(
+                                child: RichText(
+                                  text: TextSpan(children: [
+                                    TextSpan(
+                                        text: "${userProvider.userModel.cart[index].name}".toUpperCase() +"\n",
+                                        style: GoogleFonts.lato(textStyle: TextStyle(
+                                            color: black,
+                                            // fontSize: 17,
+                                            fontWeight: FontWeight.bold))),
+                                    TextSpan(
+                                        text:
+                                            "\$${userProvider.userModel.cart[index].price / 100} \n\n",
+                                            style: GoogleFonts.lato(textStyle: TextStyle(
+                                              color: Colors.grey[700],
+                                              fontWeight: FontWeight.w400,
+                                              // fontSize: 18
+                                            ),
+                                            )),
+                                  ]),
+                                ),
                               ),
                               IconButton(
                                   icon: Icon(
@@ -196,7 +202,7 @@ class _CartScreenState extends State<CartScreen> {
               ),
               Container(
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20), color: black),
+                    borderRadius: BorderRadius.circular(20), color: Colors.green[800]),
                 child: FlatButton(
                     onPressed: () async {
                       // PaystackServices paystackServices = PaystackServices();
@@ -495,6 +501,13 @@ class _CartScreenState extends State<CartScreen> {
               cart: userProvider
                   .userModel.cart,
               cardId: null);
+
+          // ProductServices productService = ProductServices();
+          // ProductProvider productProvider = ProductProvider.initialize();
+          // productService.updateDetails({
+          //   "id": productProvider,
+          //   "quantity": await productService.
+          // });
 
           for (CartItemModel cartItem
           in userProvider

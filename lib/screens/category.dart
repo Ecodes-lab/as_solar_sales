@@ -1,37 +1,46 @@
-import 'package:as_solar_sales/helpers/common.dart';
 import 'package:as_solar_sales/helpers/style.dart';
-import 'package:as_solar_sales/provider/user.dart';
-import 'package:as_solar_sales/widgets/loading.dart';
+import 'package:as_solar_sales/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import '../main.dart';
-import 'home.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-class SignUp extends StatefulWidget {
+class CategoryScreen extends StatefulWidget {
   @override
-  _SignUpState createState() => _SignUpState();
+  _CategoryScreenState createState() => _CategoryScreenState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _CategoryScreenState extends State<CategoryScreen> {
   final _formKey = GlobalKey<FormState>();
   final _key = GlobalKey<ScaffoldState>();
 
   TextEditingController _email = TextEditingController();
   TextEditingController _password = TextEditingController();
-  TextEditingController _name = TextEditingController();
-  bool hidePass = true;
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserProvider>(context);
-
     return Scaffold(
-      key: _key,
-      body: user.status == Status.Authenticating ? Loading() : Stack(
-        children: <Widget>[
-         Padding(
-              padding: const EdgeInsets.all(0),
-              child: Container(
+      appBar: AppBar(
+        // centerTitle: true,
+        elevation: 0.0,
+        backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
+        // title: Text(
+        //   "Purchase History",
+        //   style: TextStyle(color: Colors.black),
+        //
+        title: CustomText(text: "Category"),
+        leading: IconButton(
+            icon: Icon(Icons.close),
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+      ),
+      // backgroundColor: white,
+      body: Container(
+        child: Padding(
+          padding: const EdgeInsets.all(0),
+          child: Column(
+            children: [
+              Container(
                 decoration: BoxDecoration(
                   color: white,
                   borderRadius: BorderRadius.circular(16),
@@ -48,18 +57,19 @@ class _SignUpState extends State<SignUp> {
                     child: ListView(
                       children: <Widget>[
                         SizedBox(height: 40,),
-                        Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Container(
-                              alignment: Alignment.topCenter,
-                              child: Image.asset(
-                                'images/logo.png',
-                                width: 260.0,
-                              )),
-                        ),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(16.0),
+                        //   child: Container(
+                        //       alignment: Alignment.topCenter,
+                        //       child: Image.asset(
+                        //         'images/logo.png',
+                        //         width: 260.0,
+                        //       )),
+                        // ),
+
                         Padding(
                           padding:
-                              const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
+                          const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
                           child: Material(
                             borderRadius: BorderRadius.circular(10.0),
                             color: Colors.grey.withOpacity(0.3),
@@ -68,38 +78,12 @@ class _SignUpState extends State<SignUp> {
                               padding: const EdgeInsets.only(left: 12.0),
                               child: ListTile(
                                 title: TextFormField(
-                                  controller: _name,
-                                  decoration: InputDecoration(
-                                      hintText: "Full name",
-                                      icon: Icon(Icons.person_outline),
-                                      border: InputBorder.none),
-                                  validator: (value) {
-                                    if (value.isEmpty) {
-                                      return "The name field cannot be empty";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding:
-                              const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
-                          child: Material(
-                            borderRadius: BorderRadius.circular(10.0),
-                            color: Colors.grey.withOpacity(0.2),
-                            elevation: 0.0,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 12.0),
-                              child: ListTile(
-                                title: TextFormField(
                                   controller: _email,
                                   decoration: InputDecoration(
-                                      hintText: "Email",
-                                      icon: Icon(Icons.alternate_email),
-                                      border: InputBorder.none),
+                                    border: InputBorder.none,
+                                    hintText: "Email",
+                                    icon: Icon(Icons.alternate_email),
+                                  ),
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       Pattern pattern =
@@ -116,10 +100,9 @@ class _SignUpState extends State<SignUp> {
                             ),
                           ),
                         ),
-
                         Padding(
                           padding:
-                              const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
+                          const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
                           child: Material(
                             borderRadius: BorderRadius.circular(10.0),
                             color: Colors.grey.withOpacity(0.3),
@@ -129,11 +112,12 @@ class _SignUpState extends State<SignUp> {
                               child: ListTile(
                                 title: TextFormField(
                                   controller: _password,
-                                  obscureText: hidePass,
+                                  // obscureText: hidePass,
                                   decoration: InputDecoration(
-                                      hintText: "Password",
-                                      icon: Icon(Icons.lock_outline),
-                                      border: InputBorder.none),
+                                    border: InputBorder.none,
+                                    hintText: "Password",
+                                    icon: Icon(Icons.lock_outline),
+                                  ),
                                   validator: (value) {
                                     if (value.isEmpty) {
                                       return "The password field cannot be empty";
@@ -146,63 +130,53 @@ class _SignUpState extends State<SignUp> {
                                 trailing: IconButton(
                                     icon: Icon(Icons.remove_red_eye),
                                     onPressed: () {
-                                      setState(() {
-                                        hidePass = !hidePass;
-                                      });
+                                      // setState(() {
+                                      //   hidePass = !hidePass;
+                                      // });
                                     }),
                               ),
                             ),
                           ),
                         ),
-
                         Padding(
                           padding:
-                              const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
+                          const EdgeInsets.fromLTRB(14.0, 8.0, 14.0, 8.0),
                           child: Material(
                               borderRadius: BorderRadius.circular(20.0),
                               color: Colors.black,
                               elevation: 0.0,
                               child: MaterialButton(
                                 onPressed: () async{
-                                  if(_formKey.currentState.validate()){
-                                    if(!await user.signUp(_name.text ,_email.text, _password.text)){
-                                      _key.currentState.showSnackBar(SnackBar(content: Text(user.message), duration: Duration(milliseconds: 5000),));
-                                      return;
-                                    }
-                                    changeScreenReplacement(context, ScreensController());
-                                  }
+                                  // if(_formKey.currentState.validate()){
+                                  //   if(!await user.signIn(_email.text, _password.text))
+                                  //     _key.currentState.showSnackBar(SnackBar(content: Text(user.message), duration: Duration(milliseconds: 5000),));
+                                  // }
                                 },
                                 minWidth: MediaQuery.of(context).size.width,
                                 child: Text(
-                                  "Sign up",
+                                  "Login",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
-                                      color: white,
+                                      color: Colors.white,
                                       fontWeight: FontWeight.bold,
                                       fontSize: 20.0),
                                 ),
                               )),
                         ),
-                        Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: InkWell(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Text(
-                                  "I already have an account",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(color: Colors.black, fontSize: 16),
-                                ))),
-
 
                       ],
                     )),
+
               ),
-            ),
-        ],
+            ],
+          ),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: Icon(Icons.add),
+        backgroundColor: Colors.green[700],
       ),
     );
   }
-
 }

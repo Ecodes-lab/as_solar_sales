@@ -1,4 +1,5 @@
 import 'package:as_solar_sales/helpers/common.dart';
+import 'package:as_solar_sales/helpers/style.dart';
 import 'package:as_solar_sales/models/product.dart';
 import 'package:as_solar_sales/screens/product_details.dart';
 import 'package:as_solar_sales/widgets/loading.dart';
@@ -88,12 +89,13 @@ class FeaturedCard extends StatelessWidget {
                   child: Padding(
                       padding: const EdgeInsets.only(left:8.0),
                       child: RichText(text: TextSpan(children: [
-                        TextSpan(text: '${product.name} \n'.toUpperCase(), style: GoogleFonts.lato(textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w700))),
+                        TextSpan(text: '${product.name} \n'.toUpperCase(), style: GoogleFonts.lato(textStyle: TextStyle(color: Colors.orange[400], fontWeight: FontWeight.w700))),
                         // TextSpan(text: '\₦${product.price / 100} \n', style:
                         TextSpan(text: 'NGN ${product.price / 100} \n', style:
                         GoogleFonts.lato(textStyle: TextStyle(
+                            color: Colors.orange[100],
                             fontWeight: FontWeight.w700,
-                            fontSize: 15
+                            // fontSize: 15
                         )),
                           // TextStyle(fontSize: 18, fontWeight: FontWeight.bold)
                         ),

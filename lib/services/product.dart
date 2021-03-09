@@ -18,6 +18,10 @@ class ProductServices {
         return products;
       });
 
+  void updateDetails(Map<String, dynamic> values){
+    _firestore.collection(collection).doc(values["id"]).update(values);
+  }
+
 
   Future<List<ProductModel>> searchProducts({String productName}) async {
     // code to convert the first character to uppercase
@@ -28,6 +32,7 @@ class ProductServices {
         .orderBy("name")
         .startAt([searchKey])
         .endAt([searchKey + '\uf8ff'])
+        // .where("name", isEqualTo: productName)
         .get()
         .then((result) {
       List<ProductModel> products = [];

@@ -16,14 +16,14 @@ class ProductSearchScreen extends StatelessWidget {
       appBar: AppBar(
         iconTheme: IconThemeData(color: black),
         backgroundColor: white,
-        leading: IconButton(icon: Icon(Icons.close), onPressed: (){
+        leading: IconButton(icon: Icon(Icons.close, color: Colors.green,), onPressed: (){
           Navigator.pop(context);
         }),
         title: CustomText(text: "Products", size: 20,),
         elevation: 0.0,
         centerTitle: true,
         actions: <Widget>[
-          IconButton(icon: Icon(Icons.shopping_cart), onPressed: (){})
+          IconButton(icon: Icon(Icons.shopping_cart, color: Colors.green,), onPressed: (){})
         ],
       ),
       body: productProvider.productsSearched.length < 1? Column(

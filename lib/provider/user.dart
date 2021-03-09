@@ -199,7 +199,7 @@ class UserProvider with ChangeNotifier {
   }
 
   Future<bool> addToCart(
-      {ProductModel product, String size, String color}) async {
+      {ProductModel product, String size, int newPrice}) async {
     try {
       var uuid = Uuid();
       String cartItemId = uuid.v4();
@@ -210,9 +210,8 @@ class UserProvider with ChangeNotifier {
         "name": product.name,
         "image": product.picture,
         "productId": product.id,
-        "price": product.price,
-        "size": size,
-        "color": color
+        "price": newPrice == null ? product.price : newPrice,
+        "size": size
       };
 
       CartItemModel item = CartItemModel.fromMap(cartItem);
