@@ -304,7 +304,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: FloatingActionButton(
         onPressed: _refreshAction,
         child: Icon(Icons.refresh),
-        backgroundColor: Colors.orange[700],
+        backgroundColor: Colors.green[700],
       ),
     );
   }
