@@ -355,43 +355,47 @@ class _ProductDetailsState extends State<ProductDetails> {
                       ),
                     ),
                     Expanded(
-                      child: Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 8),
-                                child: Text(
-                                  "Description:",
-                                  style: GoogleFonts.lato(textStyle: TextStyle(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: Row(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Text(
+                                    "Description:",
+                                    style: GoogleFonts.lato(textStyle: TextStyle(
+                                          color: black,
+                                          fontWeight: FontWeight.normal,
+                                          fontSize: 18
+                                      ),
+                                    )
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: MediaQuery.of(context).size.width,
+                                  // height: MediaQuery.of(context).size.height,
+                                  child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                                    child: Text("${widget.product.description}"[0].toUpperCase() + "${widget.product.description}".substring(1), style: GoogleFonts.lato(textStyle: TextStyle(
                                         color: black,
                                         fontWeight: FontWeight.normal,
-                                        fontSize: 18
+                                        fontSize: 17
                                     ),
-                                  )
-                                ),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                                  child: Text("${widget.product.description}"[0].toUpperCase() + "${widget.product.description}".substring(1), style: GoogleFonts.lato(textStyle: TextStyle(
-                                      color: black,
-                                      fontWeight: FontWeight.normal,
-                                      fontSize: 17
+                                    )),
+                                  //   child: Text(
+                                  //       widget.product.description,
+                                  //         // textAlign: TextAlign.left,
+                                  //       style: TextStyle(color: Colors.white)),
                                   ),
-                                  )),
-                                //   child: Text(
-                                //       widget.product.description,
-                                //         // textAlign: TextAlign.left,
-                                //       style: TextStyle(color: Colors.white)),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     Padding(

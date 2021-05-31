@@ -5,7 +5,7 @@ import 'package:flutter_credit_card/credit_card_form.dart';
 import 'package:flutter_credit_card/credit_card_model.dart';
 import 'package:flutter_credit_card/credit_card_widget.dart';
 import 'package:as_solar_sales/provider/user.dart';
-import 'package:as_solar_sales/screens/home.dart';
+import 'package:as_solar_sales/screens/products.dart';
 import 'package:as_solar_sales/services/functions.dart';
 import 'package:as_solar_sales/services/stripe.dart';
 import 'package:provider/provider.dart';
@@ -90,7 +90,7 @@ class _CreditCardState extends State<CreditCard> {
         user.hasCard();
           user.loadCardsAndPurchase(userId: user.user.uid);
 
-          changeScreenReplacement(context, HomePage());
+          changeScreenReplacement(context, ProductPage());
 
         },
         tooltip: 'Submit',
