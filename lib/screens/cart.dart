@@ -46,6 +46,16 @@ class _CartScreenState extends State<CartScreen> {
   final _scaffoldKey = new GlobalKey<ScaffoldState>();
   OrderServices _orderServices = OrderServices();
 
+  GlobalKey<FormState> _addressFormKey = GlobalKey();
+  TextEditingController addressController = TextEditingController();
+  TextEditingController phoneNOController = TextEditingController();
+  // Partners _partner = Partners.franchise;
+  // PartnerService _partnerService = PartnerService();
+  String _address = "None";
+  String _phoneNo = "+234";
+
+  PaystackPlugin paystack;
+
   int _radioValue = 0;
   CheckoutMethod _method;
   bool _inProgress = false;
@@ -57,7 +67,8 @@ class _CartScreenState extends State<CartScreen> {
 
   @override
   void initState() {
-    PaystackPlugin.initialize(publicKey: paystackPublicKey);
+    paystack = new PaystackPlugin();
+    paystack.initialize(publicKey: paystackPublicKey);
     super.initState();
   }
 
@@ -173,282 +184,455 @@ class _CartScreenState extends State<CartScreen> {
                 );
               }),
       bottomNavigationBar: Container(
-        height: 70,
+        height: 190,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
-          child: Row(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
               Expanded(
-                child: RichText(
-                  text: TextSpan(children: [
-                    TextSpan(
-                        text: "Total: ",
-                        style: GoogleFonts.lato(textStyle: TextStyle(
-                            color: grey,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 22),
-                        )),
-                    TextSpan(
-                        text: "NGN ${userProvider.userModel.totalCartPrice / 100}",
-                        style: GoogleFonts.lato(textStyle: TextStyle(
-                            color: Colors.black,
-                            fontWeight: FontWeight.normal,
-                            fontSize: 22),
-                        )
+                child: Column(
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                          text: "Total: ",
+                          style: GoogleFonts.lato(textStyle: TextStyle(
+                              color: grey,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 22),
+                      )),
+                    ),
+                    RichText(
+                      text: TextSpan(
+                          text: "NGN ${userProvider.userModel.totalCartPrice / 100}",
+                          style: GoogleFonts.lato(textStyle: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.normal,
+                              fontSize: 22),
+                          )
+                      ),
                     )
-                  ]),
-                ),
+                  ])
               ),
               Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20), color: Colors.green[800]),
-                child: FlatButton(
-                    onPressed: () async {
-                      // PaystackServices paystackServices = PaystackServices();
-                      // if(userProvider.userModel.paystackId == null){
-                      //   String paystackID = await paystackServices.createPaystackCustomer(email: userProvider.userModel.email, userId: userProvider.user.uid);
-                      //   print("stripe id: $paystackID");
-                      //   print("stripe id: $paystackID");
-                      //   print("stripe id: $paystackID");
-                      //   print("stripe id: $paystackID");
-                      //
-                      // }
-                      if (userProvider.userModel.totalCartPrice == 0) {
-                        showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Dialog(
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(20.0)),
-                                //this right here
-                                child: Container(
-                                  height: 200,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(12.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          mainAxisAlignment:
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10), color: Colors.orange[800]),
+                        child: FlatButton(
+                            onPressed: () async {
+                              // PaystackServices paystackServices = PaystackServices();
+                              // if(userProvider.userModel.paystackId == null){
+                              //   String paystackID = await paystackServices.createPaystackCustomer(email: userProvider.userModel.email, userId: userProvider.user.uid);
+                              //   print("stripe id: $paystackID");
+                              //   print("stripe id: $paystackID");
+                              //   print("stripe id: $paystackID");
+                              //   print("stripe id: $paystackID");
+                              //
+                              // }
+                              if (userProvider.userModel.totalCartPrice == 0) {
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Dialog(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(20.0)),
+                                        //this right here
+                                        child: Container(
+                                          height: 200,
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(12.0),
+                                            child: Column(
+                                              mainAxisAlignment:
                                               MainAxisAlignment.center,
-                                          children: <Widget>[
+                                              crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                                  children: <Widget>[
+                                                    Text(
+                                                      'Your cart is emty',
+                                                      textAlign: TextAlign.center,
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    });
+                                return;
+                              }
+                              _addressAlert(context, userProvider, appProvider);
+
+                            },
+                            child: Text(
+                              "Change Address or Phone No:",
+                              style: GoogleFonts.lato(textStyle: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.normal,
+                                  fontSize: 20),
+                              ),
+                            )),
+                      ),
+                    ),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10), color: Colors.green[800]),
+                      child: FlatButton(
+                          onPressed: () async {
+                            userProvider.reloadUserModel();
+                            // appProvider.changeIsLoading();
+                            // PaystackServices paystackServices = PaystackServices();
+                            // if(userProvider.userModel.paystackId == null){
+                            //   String paystackID = await paystackServices.createPaystackCustomer(email: userProvider.userModel.email, userId: userProvider.user.uid);
+                            //   print("stripe id: $paystackID");
+                            //   print("stripe id: $paystackID");
+                            //   print("stripe id: $paystackID");
+                            //   print("stripe id: $paystackID");
+                            //
+                            // }
+                            if (userProvider.userModel.totalCartPrice == 0) {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20.0)),
+                                      //this right here
+                                      child: Container(
+                                        height: 200,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Text(
+                                                    'Your cart is emty',
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  });
+                              return;
+                            }
+
+                            if (userProvider.userModel.address.isEmpty || userProvider.userModel.phoneNo.isEmpty) {
+                              showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return Dialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20.0)),
+                                      //this right here
+                                      child: Container(
+                                        height: 200,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                                children: <Widget>[
+                                                  Text(
+                                                    'You have no address or phoneNo',
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  });
+                              return;
+                            }
+                            // _handleCheckout(context, userProvider);
+                            // var uuid = Uuid();
+                            // String id = uuid.v4();
+                            // _orderServices.createOrder(
+                            //     userId: userProvider.user.uid,
+                            //     id: id,
+                            //     description:
+                            //     "Some random description",
+                            //     status: "complete",
+                            //     totalPrice: userProvider
+                            //         .userModel.totalCartPrice,
+                            //     cart: userProvider
+                            //         .userModel.cart,
+                            //     cardId: null);
+                            //     PaystackServices paystackServices = PaystackServices() ;
+                            //     //              1000 is equal to $10.00
+                            //         paystackServices.charge(
+                            //             userId: userProvider.user.uid,
+                            //             // id: id,
+                            //             description:
+                            //             "Some random description",
+                            //             status: "complete",
+                            //             amount: userProvider
+                            //                 .userModel.totalCartPrice,
+                            //             cart: userProvider
+                            //                 .userModel.cart,
+                            //             // cardId: null
+                            //             cardId: userProvider.userModel.activeCard
+                            //         ).then((value) {
+                            //           userProvider.loadCardsAndPurchase(
+                            //               userId: userProvider.user
+                            //                   .uid);
+                            //           // if (value) {
+                            //           //   changeScreen(
+                            //           //       context, Success());
+                            //           // } else {
+                            //           //   print(
+                            //           //       "we have a payment error");
+                            //           //   print(
+                            //           //       "we have a payment error");
+                            //           //   print(
+                            //           //       "we have a payment error");
+                            //           //
+                            //           //   //                  _key.currentState.showSnackBar(
+                            //           //   //                      SnackBar(content: Text("Payment failed")));
+                            //           // };
+                            //         });
+                            // for (CartItemModel cartItem
+                            // in userProvider
+                            //     .userModel.cart) {
+                            //   bool value = await userProvider
+                            //       .removeFromCart(
+                            //       cartItem: cartItem);
+                            //   if (value) {
+                            //     userProvider.reloadUserModel();
+                            //     print("Item added to cart");
+                            //     _key.currentState.showSnackBar(
+                            //         SnackBar(
+                            //             content: Text(
+                            //                 "Removed from Cart!")));
+                            //   } else {
+                            //     print("ITEM WAS NOT REMOVED");
+                            //   }
+                            // }
+                            // _key.currentState.showSnackBar(
+                            //     SnackBar(
+                            //         content: Text(
+                            //             "Order created!")));
+                            // Navigator.pop(context);
+                            showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return Dialog(
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(20.0)),
+                                    //this right here
+                                    child: Container(
+                                      height: 200,
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(12.0),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
                                             Text(
-                                              'Your cart is emty',
+                                              'You will be charged \$${userProvider.userModel.totalCartPrice / 100} now or later!',
                                               textAlign: TextAlign.center,
                                             ),
+                                            SizedBox(
+                                              width: 320.0,
+                                              child: RaisedButton(
+                                                onPressed: () async {
+                                                  _handleCheckout(context, userProvider);
+
+                                                  // var uuid = Uuid();
+                                                  // String id = uuid.v4();
+                                                  // _orderServices.createOrder(
+                                                  //     userId: userProvider.user.uid,
+                                                  //     id: id,
+                                                  //     description:
+                                                  //         "Some random description",
+                                                  //     status: "complete",
+                                                  //     totalPrice: userProvider
+                                                  //         .userModel.totalCartPrice,
+                                                  //     cart: userProvider
+                                                  //         .userModel.cart,
+                                                  //     cardId: null);
+                                                  // //     PaystackServices paystackServices = PaystackServices() ;
+                                                  // //     //              1000 is equal to $10.00
+                                                  // //         paystackServices.charge(
+                                                  // //             userId: userProvider.user.uid,
+                                                  // //             // id: id,
+                                                  // //             description:
+                                                  // //             "Some random description",
+                                                  // //             status: "complete",
+                                                  // //             amount: userProvider
+                                                  // //                 .userModel.totalCartPrice,
+                                                  // //             cart: userProvider
+                                                  // //                 .userModel.cart,
+                                                  // //             // cardId: null
+                                                  // //             cardId: userProvider.userModel.activeCard
+                                                  // //         ).then((value) {
+                                                  // //           userProvider.loadCardsAndPurchase(
+                                                  // //               userId: userProvider.user
+                                                  // //                   .uid);
+                                                  // //           // if (value) {
+                                                  // //           //   changeScreen(
+                                                  // //           //       context, Success());
+                                                  // //           // } else {
+                                                  // //           //   print(
+                                                  // //           //       "we have a payment error");
+                                                  // //           //   print(
+                                                  // //           //       "we have a payment error");
+                                                  // //           //   print(
+                                                  // //           //       "we have a payment error");
+                                                  // //           //
+                                                  // //           //   //                  _key.currentState.showSnackBar(
+                                                  // //           //   //                      SnackBar(content: Text("Payment failed")));
+                                                  // //           // };
+                                                  // //         });
+                                                  //   for (CartItemModel cartItem
+                                                  //     in userProvider
+                                                  //         .userModel.cart) {
+                                                  //   bool value = await userProvider
+                                                  //       .removeFromCart(
+                                                  //           cartItem: cartItem);
+                                                  //   if (value) {
+                                                  //     userProvider.reloadUserModel();
+                                                  //     print("Item added to cart");
+                                                  //     _key.currentState.showSnackBar(
+                                                  //         SnackBar(
+                                                  //             content: Text(
+                                                  //                 "Removed from Cart!")));
+                                                  //   } else {
+                                                  //     print("ITEM WAS NOT REMOVED");
+                                                  //   }
+                                                  // }
+                                                  // _key.currentState.showSnackBar(
+                                                  //     SnackBar(
+                                                  //         content: Text(
+                                                  //             "Order created!")));
+                                                  // Navigator.pop(context);
+                                                },
+                                                child: Text(
+                                                  "Pay Now",
+                                                  style:
+                                                      TextStyle(color: Colors.white),
+                                                ),
+                                                color: const Color(0xFF1BC0C5),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 320.0,
+                                              child: RaisedButton(
+                                                  onPressed: () async {
+                                                    var uuid = Uuid();
+                                                    String id = uuid.v4();
+                                                    _orderServices.createOrder(
+                                                        userId: userProvider.user.uid,
+                                                        id: id,
+                                                        description:
+                                                        "Some random description",
+                                                        address: userProvider.userModel.address,
+                                                        phoneNo: userProvider.userModel.phoneNo,
+                                                        status: "complete",
+                                                        totalPrice: userProvider.userModel.totalCartPrice,
+                                                        cart: userProvider
+                                                            .userModel.cart,
+                                                        cardId: null);
+
+                                                    // ProductServices productService = ProductServices();
+                                                    // ProductProvider productProvider = ProductProvider.initialize();
+                                                    // productService.updateDetails({
+                                                    //   "id": productProvider,
+                                                    //   "quantity": await productService.
+                                                    // });
+
+                                                    for (CartItemModel cartItem
+                                                    in userProvider
+                                                        .userModel.cart) {
+                                                      bool value = await userProvider.removeFromCart(cartItem: cartItem);
+                                                      if (value) {
+                                                        userProvider.reloadUserModel();
+                                                        print("Item added to cart");
+                                                        _key.currentState.showSnackBar(
+                                                            SnackBar(
+                                                                content: Text(
+                                                                    "Removed from Cart!")));
+                                                      } else {
+                                                        print("ITEM WAS NOT REMOVED");
+                                                      }
+                                                    }
+                                                    _key.currentState.showSnackBar(
+                                                        SnackBar(
+                                                            content: Text(
+                                                                "Order created!")));
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text(
+                                                    "Pay Later",
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                  color: Colors.orange[800]),
+                                            ),
+                                            SizedBox(
+                                              width: 320.0,
+                                              child: RaisedButton(
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Text(
+                                                    "Reject",
+                                                    style: TextStyle(
+                                                        color: Colors.white),
+                                                  ),
+                                                  color: red),
+                                            )
                                           ],
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            });
-                        return;
-                      }
-                      _handleCheckout(context, userProvider);
-                      // var uuid = Uuid();
-                      // String id = uuid.v4();
-                      // _orderServices.createOrder(
-                      //     userId: userProvider.user.uid,
-                      //     id: id,
-                      //     description:
-                      //     "Some random description",
-                      //     status: "complete",
-                      //     totalPrice: userProvider
-                      //         .userModel.totalCartPrice,
-                      //     cart: userProvider
-                      //         .userModel.cart,
-                      //     cardId: null);
-                      //     PaystackServices paystackServices = PaystackServices() ;
-                      //     //              1000 is equal to $10.00
-                      //         paystackServices.charge(
-                      //             userId: userProvider.user.uid,
-                      //             // id: id,
-                      //             description:
-                      //             "Some random description",
-                      //             status: "complete",
-                      //             amount: userProvider
-                      //                 .userModel.totalCartPrice,
-                      //             cart: userProvider
-                      //                 .userModel.cart,
-                      //             // cardId: null
-                      //             cardId: userProvider.userModel.activeCard
-                      //         ).then((value) {
-                      //           userProvider.loadCardsAndPurchase(
-                      //               userId: userProvider.user
-                      //                   .uid);
-                      //           // if (value) {
-                      //           //   changeScreen(
-                      //           //       context, Success());
-                      //           // } else {
-                      //           //   print(
-                      //           //       "we have a payment error");
-                      //           //   print(
-                      //           //       "we have a payment error");
-                      //           //   print(
-                      //           //       "we have a payment error");
-                      //           //
-                      //           //   //                  _key.currentState.showSnackBar(
-                      //           //   //                      SnackBar(content: Text("Payment failed")));
-                      //           // };
-                      //         });
-                      // for (CartItemModel cartItem
-                      // in userProvider
-                      //     .userModel.cart) {
-                      //   bool value = await userProvider
-                      //       .removeFromCart(
-                      //       cartItem: cartItem);
-                      //   if (value) {
-                      //     userProvider.reloadUserModel();
-                      //     print("Item added to cart");
-                      //     _key.currentState.showSnackBar(
-                      //         SnackBar(
-                      //             content: Text(
-                      //                 "Removed from Cart!")));
-                      //   } else {
-                      //     print("ITEM WAS NOT REMOVED");
-                      //   }
-                      // }
-                      // _key.currentState.showSnackBar(
-                      //     SnackBar(
-                      //         content: Text(
-                      //             "Order created!")));
-                      // Navigator.pop(context);
-                      // showDialog(
-                      //     context: context,
-                      //     builder: (BuildContext context) {
-                      //       return Dialog(
-                      //         shape: RoundedRectangleBorder(
-                      //             borderRadius: BorderRadius.circular(20.0)),
-                      //         //this right here
-                      //         child: Container(
-                      //           height: 200,
-                      //           child: Padding(
-                      //             padding: const EdgeInsets.all(12.0),
-                      //             child: Column(
-                      //               mainAxisAlignment: MainAxisAlignment.center,
-                      //               crossAxisAlignment:
-                      //                   CrossAxisAlignment.start,
-                      //               children: [
-                      //                 Text(
-                      //                   'You will be charged \$${userProvider.userModel.totalCartPrice / 100} upon delivery!',
-                      //                   textAlign: TextAlign.center,
-                      //                 ),
-                      //                 SizedBox(
-                      //                   width: 320.0,
-                      //                   child: RaisedButton(
-                      //                     onPressed: () async {
-                      //
-                      //                       var uuid = Uuid();
-                      //                       String id = uuid.v4();
-                      //                       _orderServices.createOrder(
-                      //                           userId: userProvider.user.uid,
-                      //                           id: id,
-                      //                           description:
-                      //                               "Some random description",
-                      //                           status: "complete",
-                      //                           totalPrice: userProvider
-                      //                               .userModel.totalCartPrice,
-                      //                           cart: userProvider
-                      //                               .userModel.cart,
-                      //                           cardId: null);
-                      //                       //     PaystackServices paystackServices = PaystackServices() ;
-                      //                       //     //              1000 is equal to $10.00
-                      //                       //         paystackServices.charge(
-                      //                       //             userId: userProvider.user.uid,
-                      //                       //             // id: id,
-                      //                       //             description:
-                      //                       //             "Some random description",
-                      //                       //             status: "complete",
-                      //                       //             amount: userProvider
-                      //                       //                 .userModel.totalCartPrice,
-                      //                       //             cart: userProvider
-                      //                       //                 .userModel.cart,
-                      //                       //             // cardId: null
-                      //                       //             cardId: userProvider.userModel.activeCard
-                      //                       //         ).then((value) {
-                      //                       //           userProvider.loadCardsAndPurchase(
-                      //                       //               userId: userProvider.user
-                      //                       //                   .uid);
-                      //                       //           // if (value) {
-                      //                       //           //   changeScreen(
-                      //                       //           //       context, Success());
-                      //                       //           // } else {
-                      //                       //           //   print(
-                      //                       //           //       "we have a payment error");
-                      //                       //           //   print(
-                      //                       //           //       "we have a payment error");
-                      //                       //           //   print(
-                      //                       //           //       "we have a payment error");
-                      //                       //           //
-                      //                       //           //   //                  _key.currentState.showSnackBar(
-                      //                       //           //   //                      SnackBar(content: Text("Payment failed")));
-                      //                       //           // };
-                      //                       //         });
-                      //                         for (CartItemModel cartItem
-                      //                           in userProvider
-                      //                               .userModel.cart) {
-                      //                         bool value = await userProvider
-                      //                             .removeFromCart(
-                      //                                 cartItem: cartItem);
-                      //                         if (value) {
-                      //                           userProvider.reloadUserModel();
-                      //                           print("Item added to cart");
-                      //                           _key.currentState.showSnackBar(
-                      //                               SnackBar(
-                      //                                   content: Text(
-                      //                                       "Removed from Cart!")));
-                      //                         } else {
-                      //                           print("ITEM WAS NOT REMOVED");
-                      //                         }
-                      //                       }
-                      //                       _key.currentState.showSnackBar(
-                      //                           SnackBar(
-                      //                               content: Text(
-                      //                                   "Order created!")));
-                      //                       Navigator.pop(context);
-                      //                     },
-                      //                     child: Text(
-                      //                       "Accept",
-                      //                       style:
-                      //                           TextStyle(color: Colors.white),
-                      //                     ),
-                      //                     color: const Color(0xFF1BC0C5),
-                      //                   ),
-                      //                 ),
-                      //                 SizedBox(
-                      //                   width: 320.0,
-                      //                   child: RaisedButton(
-                      //                       onPressed: () {
-                      //                         Navigator.pop(context);
-                      //                       },
-                      //                       child: Text(
-                      //                         "Reject",
-                      //                         style: TextStyle(
-                      //                             color: Colors.white),
-                      //                       ),
-                      //                       color: red),
-                      //                 )
-                      //               ],
-                      //             ),
-                      //           ),
-                      //         ),
-                      //       );
-                      //     });
-                    },
-                    child: Text(
-                      "Check out",
-                      style: GoogleFonts.lato(textStyle: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 20),
-                      ),
-                    )),
+                                  );
+                                });
+                          },
+                          child: Text(
+                            "Check out",
+                            style: GoogleFonts.lato(textStyle: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.normal,
+                                fontSize: 20),
+                            ),
+                          )),
+                    ),
+                  ],
+                ),
               )
             ],
           ),
@@ -458,7 +642,7 @@ class _CartScreenState extends State<CartScreen> {
   }
 
   _handleCheckout(BuildContext context, userProvider ) async {
-
+    // paystack = new PaystackPlugin();
     PaystackServices paystackServices = PaystackServices();
     if(userProvider.userModel.paystackId == null){
       String paystackID = await paystackServices.createPaystackCustomer(email: userProvider.userModel.email, userId: userProvider.user.uid);
@@ -479,7 +663,7 @@ class _CartScreenState extends State<CartScreen> {
       charge.reference = _getReference();
 
     try {
-      CheckoutResponse response = await PaystackPlugin.checkout(
+      CheckoutResponse response = await paystack.checkout(
         context,
         method: CheckoutMethod.card,
         charge: charge,
@@ -585,6 +769,262 @@ class _CartScreenState extends State<CartScreen> {
     } catch (e) {
 
     }
+  }
+
+  Future _addressAlert(BuildContext context, userProvider, appProvider) async {
+    // GlobalKey<FormState> _partnerFormKey = GlobalKey();
+    // TextEditingController partnerController = TextEditingController();
+    // TextEditingController partnerCodeController = TextEditingController();
+    // final userProvider = Provider.of<UserProvider>(context);
+    // final appProvider = Provider.of<AppProvider>(context);
+    setState(() {
+      _address = userProvider.userModel.address;
+      _phoneNo = userProvider.userModel.phoneNo;
+      addressController.text = _address;
+      phoneNOController.text = _phoneNo;
+    });
+    var alert = new StatefulBuilder(
+        builder: (BuildContext context, StateSetter setState) {
+
+          return AlertDialog(
+            scrollable: true,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(20.0))
+            ),
+            backgroundColor: Colors.orange,
+            content: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                children: <Widget>[
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.end,
+                  //   children: [
+                  //     DropdownButton<String>(
+                  //       value: _address,
+                  //       dropdownColor: Colors.black,
+                  //       icon: Icon(Icons.arrow_downward),
+                  //       iconSize: 24,
+                  //       elevation: 16,
+                  //       style: TextStyle(color: Colors.white),
+                  //       underline: Container(
+                  //         height: 2,
+                  //         color: Colors.green,
+                  //       ),
+                  //       onChanged: (String newValue) {
+                  //         setState(() {
+                  //           _address = newValue;
+                  //           addressController.text = newValue;
+                  //         });
+                  //       },
+                  //       items: <String>['None', 'Franchise', 'IBO', 'Agent']
+                  //           .map<DropdownMenuItem<String>>((String value) {
+                  //         return DropdownMenuItem<String>(
+                  //           value: value,
+                  //           child: Text(value),
+                  //         );
+                  //       }).toList(),
+                  //     ),
+                  //   ],
+                  // ),
+
+                  Form(
+                    key: _addressFormKey,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: <Widget>[
+                          TextFormField(
+                            // enabled: false,
+                            controller: addressController,
+                            keyboardType: TextInputType.streetAddress,
+                            validator: (value){
+                              if(value.isEmpty){
+                                return 'partner cannot be empty';
+                              }
+                            },
+                            decoration: InputDecoration(
+                              hintText: "Address",
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                            ),
+                          ),
+                          Divider(),
+                          TextFormField(
+                            controller: phoneNOController,
+                            keyboardType: TextInputType.phone,
+                            // maxLines: 1,
+                            validator: (value){
+                              if(value.isEmpty){
+                                return 'phone number cannot be empty';
+                              }
+                            },
+                            decoration: InputDecoration(
+                              hintText: "Enter phone NO: eg. +234xxxxxxxxx",
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(color: Colors.green),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(onPressed: () async {
+                Navigator.pop(context);
+                appProvider.changeIsLoading();
+                bool success = await userProvider.addAddress(
+                    address: addressController.text,
+                    phoneNo: phoneNOController.text
+                );
+                if (success) {
+                  _key.currentState.showSnackBar(
+                      SnackBar(content: Text("Address Changed!",)));
+                  userProvider.reloadUserModel();
+                  appProvider.changeIsLoading();
+                  addressController.clear();
+                  return;
+                } else {
+                  _key.currentState.showSnackBar(SnackBar(
+                      content: Text("Address not changed!")));
+                  appProvider.changeIsLoading();
+                  addressController.clear();
+                  return;
+                }
+                // if (addressController.text != null && addressController.text == "None" && addressesController.text == "") {
+                //   Navigator.pop(context);
+                //   appProvider.changeIsLoading();
+                //   bool success = await userProvider.addToCart(
+                //       product: widget.product,
+                //       size: _size);
+                //   if (success) {
+                //     _key.currentState.showSnackBar(
+                //         SnackBar(content: Text("Added to Cart!",)));
+                //     userProvider.reloadUserModel();
+                //     appProvider.changeIsLoading();
+                //     return;
+                //   } else {
+                //     _key.currentState.showSnackBar(SnackBar(
+                //         content: Text("Not added to Cart!")));
+                //     appProvider.changeIsLoading();
+                //     return;
+                //   }
+                //   // dynamic partner = await _partnerService.getPartner();
+                //   // dynamic partner = await _partnerService.getPartner(partnerController.text);
+                //
+                //   // partner.m
+                //   // print(partner);
+                // }
+                // if(addressController.text != null && addressController.text != "None" && addressesController.text != null){
+                //   await _partnerService.getPartner(addressController.text).then((value) {
+                //     value.map((e) async {
+                //       Map partners = {
+                //         "Franchise": widget.product.franchise,
+                //         "IBO": widget.product.ibo,
+                //         "Agent": widget.product.agent
+                //       };
+                //       if (e.get("partner") == addressController.text && e.get("code") == addressesController.text) {
+                //         // print(e.data()["partner"]);
+                //         appProvider.changeIsLoading();
+                //         bool success = await userProvider.addToCart(
+                //             product: widget.product,
+                //             size: _size,
+                //             newPrice: partners[addressController.text]
+                //         );
+                //         if (success) {
+                //           _key.currentState.showSnackBar(
+                //               SnackBar(content: Text("Added to Cart!")));
+                //           userProvider.reloadUserModel();
+                //           appProvider.changeIsLoading();
+                //           return;
+                //         } else {
+                //           _key.currentState.showSnackBar(SnackBar(
+                //               content: Text("Not added to Cart!")));
+                //           appProvider.changeIsLoading();
+                //           return;
+                //         }
+                //       } else {
+                //         // print("Code is incorrect for partner ${partnerController.text}");
+                //         _key.currentState.showSnackBar(SnackBar(content: Text("Code is incorrect for partner ${addressController.text}"), duration: Duration(milliseconds: 5000),));
+                //         return;
+                //       }
+                //       // return;
+                //     }).toList();
+                //   });
+                //   // dynamic partner = await _partnerService.getPartner();
+                //   // dynamic partner = await _partnerService.getPartner(partnerController.text);
+                //
+                //   // partner.m
+                //   // print(partner);
+                //   addressController.clear();
+                //   addressesController.clear();
+                // }
+                // // else {
+                // //   Navigator.pop(context);
+                // //   appProvider.changeIsLoading();
+                // //   bool success = await userProvider.addToCart(
+                // //       product: widget.product,
+                // //       size: _size);
+                // //   if (success) {
+                // //     _key.currentState.showSnackBar(
+                // //         SnackBar(content: Text("Added to Cart!",), duration: Duration(milliseconds: 5000)));
+                // //     userProvider.reloadUserModel();
+                // //     appProvider.changeIsLoading();
+                // //     return;
+                // //   } else {
+                // //     _key.currentState.showSnackBar(SnackBar(
+                // //         content: Text("Not added to Cart!"), duration: Duration(milliseconds: 5000)));
+                // //     appProvider.changeIsLoading();
+                // //     return;
+                // //   }
+                // //   // dynamic partner = await _partnerService.getPartner();
+                // //   // dynamic partner = await _partnerService.getPartner(partnerController.text);
+                // //
+                // //   // partner.m
+                // //   // print(partner);
+                // //   partnerController.clear();
+                // //   partnerCodeController.clear();
+                // // }
+                // // Fluttertoast.showToast(msg: 'Partner added');
+                Navigator.pop(context);
+              }, child: Text(
+                  'ADD',
+                  style: GoogleFonts.lato(textStyle: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    // fontSize: 18
+                  ))
+              )),
+              FlatButton(onPressed: (){
+                addressController.clear();
+                phoneNOController.clear();
+                Navigator.pop(context);
+              }, child: Text(
+                  'CANCEL',
+                  style: GoogleFonts.lato(textStyle: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    // fontSize: 18
+                  ))
+              )),
+
+            ],
+          );
+        }
+    );
+
+    showDialog(context: context, builder: (_) => alert);
   }
 }
 

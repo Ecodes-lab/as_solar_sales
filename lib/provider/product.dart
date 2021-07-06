@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class ProductProvider with ChangeNotifier{
-  User user = FirebaseAuth.instance.currentUser;
+  User user;
   ProductServices _productServices = ProductServices();
   List<ProductModel> products = [];
   List<ProductModel> productsSearched = [];

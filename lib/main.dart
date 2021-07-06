@@ -8,13 +8,20 @@ import 'package:as_solar_sales/screens/home.dart';
 import 'package:as_solar_sales/screens/login.dart';
 import 'package:as_solar_sales/screens/splash.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:splashscreen/splashscreen.dart';
 
 import 'helpers/style.dart';
 
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setSystemUIOverlayStyle(
+  //   const SystemUiOverlayStyle(
+  //     statusBarColor: Colors.blueAccent,
+  //   ),
+  // );
   await Firebase.initializeApp();
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider.value(value: UserProvider.initialize()),

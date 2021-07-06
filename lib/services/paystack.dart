@@ -40,7 +40,7 @@ class PaystackServices{
     // // print(paystackId);
     // return paystackId;
 
-    String paystackId = await http.post(CUSTOMERS_URL, body: body, headers: headers).then((response){
+    String paystackId = await http.post(Uri.parse(CUSTOMERS_URL), body: body, headers: headers).then((response){
       final Map resData = jsonDecode(response.body);
       // final Map paystackId = jsonDecode(response.body);
       String paystackId = resData["data"]['customer_code'];
@@ -72,7 +72,7 @@ class PaystackServices{
     Dio().post(PAYMENT_METHOD_URL, data: body, options: Options(contentType: Headers.formUrlEncodedContentType, headers: headers)).then((response){
       String paymentMethod = response.data["id"];
       print("=== The payment mathod id id ===: $paymentMethod");
-      http.post("https://api.stripe.com/v1/payment_methods/$paymentMethod/attach", body: {
+      http.post(Uri.parse("https://api.stripe.com/v1/payment_methods/$paymentMethod/attach"), body: {
         "customer": paystackId
       },
           headers: headers

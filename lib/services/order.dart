@@ -6,7 +6,7 @@ class OrderServices{
   String collection = "orders";
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  void createOrder({String userId ,String id,String description,String status ,List<CartItemModel> cart, int totalPrice, String cardId}) {
+  void createOrder({String userId ,String id,String description, String address, String phoneNo, String status ,List<CartItemModel> cart, int totalPrice, String cardId}) {
     List<Map> convertedCart = [];
 
     for(CartItemModel item in cart){
@@ -20,6 +20,8 @@ class OrderServices{
       "total": totalPrice,
       "createdAt": DateTime.now().millisecondsSinceEpoch,
       "description": description,
+      "address": address,
+      "phoneNo": phoneNo,
       "status": status,
       "cardId": cardId
     });

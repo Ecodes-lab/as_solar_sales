@@ -40,6 +40,9 @@ class _HomePageState extends State<HomePage> {
   final _formKey = GlobalKey<FormState>();
   final _verticalSizeBox = const SizedBox(height: 20.0);
   final _horizontalSizeBox = const SizedBox(width: 10.0);
+
+  PaystackPlugin paystack;
+  
   var _border = new Container(
     width: double.infinity,
     height: 1.0,
@@ -55,7 +58,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    PaystackPlugin.initialize(publicKey: paystackPublicKey);
+    paystack.initialize(publicKey: paystackPublicKey);
     super.initState();
   }
 
@@ -267,7 +270,7 @@ class _HomePageState extends State<HomePage> {
     }
 
     try {
-      CheckoutResponse response = await PaystackPlugin.checkout(
+      CheckoutResponse response = await paystack.checkout(
         context,
         method: _method,
         charge: charge,
@@ -312,7 +315,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   _chargeCard(Charge charge) async {
-    final response = await PaystackPlugin.chargeCard(context, charge: charge);
+    final response = await paystack.chargeCard(context, charge: charge);
 
     final reference = response.reference;
 
@@ -407,7 +410,7 @@ class _HomePageState extends State<HomePage> {
     String accessCode;
     try {
       print("Access code url = $url");
-      http.Response response = await http.get(url);
+      http.Response response = await http.get(Uri.parse(url));
       accessCode = response.body;
       print('Response for access code = $accessCode');
     } catch (e) {
@@ -425,7 +428,7 @@ class _HomePageState extends State<HomePage> {
     _updateStatus(reference, 'Verifying...');
     String url = '$backendUrl/verify/$reference';
     try {
-      http.Response response = await http.get(url);
+      http.Response response = await http.get(Uri.parse(url));
       var body = response.body;
       _updateStatus(reference, body);
     } catch (e) {

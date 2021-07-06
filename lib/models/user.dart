@@ -1,11 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 
+import 'address.dart';
 import 'cart_item.dart';
 
 class UserModel {
   static const ID = "uid";
   static const NAME = "name";
   static const EMAIL = "email";
+  static const ADDRESS = "address";
+  static const PHONENO = "phoneNo";
+  static const ADDRESSES = "addresses";
   static const STRIPE_ID = "stripeId";
   static const PAYSTACK_ID = "paystackId";
   static const CART = "cart";
@@ -16,6 +21,8 @@ class UserModel {
 
   String _name;
   String _email;
+  String _address;
+  String _phoneNo;
   String _id;
   String _stripeId;
   String _paystackId;
@@ -24,11 +31,17 @@ class UserModel {
   bool _isAdmin;
   bool _isSuperAdmin;
 
+  // List _addresses;
+
 
 //  getters
   String get name => _name;
 
   String get email => _email;
+
+  String get address => _address;
+
+  String get phoneNo => _phoneNo;
 
   String get id => _id;
 
@@ -39,6 +52,7 @@ class UserModel {
   String get activeCard => _activeCard;
 
   // public variables
+  List<AddressModel> addresses;
   List<CartItemModel> cart;
   int totalCartPrice;
 
@@ -50,16 +64,20 @@ class UserModel {
 
 
   UserModel.fromSnapshot(DocumentSnapshot snapshot) {
-    _name = snapshot.data()[NAME];
-    _email = snapshot.data()[EMAIL];
-    _id = snapshot.data()[ID];
-    _stripeId = snapshot.data()[STRIPE_ID] ?? null;
-    _paystackId = snapshot.data()[PAYSTACK_ID] ?? null;
-    cart = _convertCartItems(snapshot.data()[CART]?? []);
-    totalCartPrice = snapshot.data()[CART] == null ? 0 :getTotalPrice(cart: snapshot.data()[CART]);
-    _activeCard = snapshot.data()[ACTIVE_CARD] ?? null;
-    _isAdmin = snapshot.data()[IS_ADMIN] ?? false;
-    _isSuperAdmin = snapshot.data()[IS_SUPER_ADMIN] ?? false;
+    Map<String, dynamic> data = snapshot.data();
+    _name = data[NAME];
+    _email = data[EMAIL];
+    _address = data[ADDRESS] ?? "";
+    _phoneNo = data[PHONENO] ?? "";
+    addresses = _convertAddress(data[ADDRESSES] ?? []);
+    _id = data[ID];
+    _stripeId = data[STRIPE_ID] ?? null;
+    _paystackId = data[PAYSTACK_ID] ?? null;
+    cart = _convertCartItems(data[CART] ?? []);
+    totalCartPrice = data[CART] == null ? 0 :getTotalPrice(cart: data[CART]);
+    _activeCard = data[ACTIVE_CARD] ?? null;
+    _isAdmin = data[IS_ADMIN] ?? false;
+    _isSuperAdmin = data[IS_SUPER_ADMIN] ?? false;
 
   }
 
@@ -69,6 +87,14 @@ class UserModel {
       convertedCart.add(CartItemModel.fromMap(cartItem));
     }
     return convertedCart;
+  }
+
+  List<AddressModel> _convertAddress(List addresses){
+    List<AddressModel> convertedAddress = [];
+    for(Map address in addresses){
+      convertedAddress.add(AddressModel.fromMap(address));
+    }
+    return convertedAddress;
   }
 
   int getTotalPrice({List cart}){

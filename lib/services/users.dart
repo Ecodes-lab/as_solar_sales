@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:as_solar_sales/models/address.dart';
 import 'package:as_solar_sales/models/cart_item.dart';
 import 'package:as_solar_sales/models/user.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -47,6 +48,12 @@ class UserServices{
   void removeFromCart({String userId, CartItemModel cartItem}){
     _firestore.collection(collection).doc(userId).update({
       "cart": FieldValue.arrayRemove([cartItem.toMap()])
+    });
+  }
+
+  void addToAddress({String userId, AddressModel addressModel}){
+    _firestore.collection(collection).doc(userId).update({
+      "addresses": FieldValue.arrayUnion([addressModel.toMap()])
     });
   }
 }

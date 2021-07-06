@@ -1,6 +1,8 @@
 
 import 'package:as_solar_sales/helpers/common.dart';
 import 'package:as_solar_sales/helpers/style.dart';
+import 'package:as_solar_sales/provider/user.dart';
+import 'package:as_solar_sales/screens/product_video.dart';
 import 'package:as_solar_sales/screens/products.dart';
 import 'package:as_solar_sales/widgets/loading.dart';
 // import 'package:as_solar_sales/provider/app.dart';
@@ -26,11 +28,13 @@ import 'package:as_solar_sales/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 
 class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final userProvider = Provider.of<UserProvider>(context);
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -79,7 +83,7 @@ class HomePage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 onTap: (){
-                  // changeScreen(context, ProductDetails(product: product,));
+                  changeScreen(context, ProductVideoScreen());
                 },
                 child: Container(
                   height: 200,
@@ -98,7 +102,7 @@ class HomePage extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      Text("AS Product Video",
+                      Text("AS Video",
                           style: GoogleFonts.lato(textStyle: TextStyle(
                               fontSize: 25,
                               color: Colors.black54,
@@ -115,6 +119,13 @@ class HomePage extends StatelessWidget {
             )
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          userProvider.signOut();
+        },
+        child: Icon(Icons.logout),
+        backgroundColor: Colors.deepOrange,
       ),
     );
   }

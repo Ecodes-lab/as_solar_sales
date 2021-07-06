@@ -27,7 +27,7 @@ class StripeServices{
       'email': email,
     };
 
-    String stripeId = await http.post(CUSTOMERS_URL, body: body, headers: headers).then((response){
+    String stripeId = await http.post(Uri.parse(CUSTOMERS_URL), body: body, headers: headers).then((response){
      String stripeId = jsonDecode(response.body)["id"];
       print("The stripe id is: $stripeId");
       UserServices userService = UserServices();
@@ -55,7 +55,7 @@ class StripeServices{
     Dio().post(PAYMENT_METHOD_URL, data: body, options: Options(contentType: Headers.formUrlEncodedContentType, headers: headers)).then((response){
       String paymentMethod = response.data["id"];
       print("=== The payment mathod id id ===: $paymentMethod");
-      http.post("https://api.stripe.com/v1/payment_methods/$paymentMethod/attach", body: {
+      http.post(Uri.parse("https://api.stripe.com/v1/payment_methods/$paymentMethod/attach"), body: {
         "customer": stripeId
       },
       headers: headers

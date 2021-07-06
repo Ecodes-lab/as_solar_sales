@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class OrderModel {
   static const ID = "id";
   static const DESCRIPTION = "description";
+  static const ADDRESS = "address";
+  static const PHONENO = "phoneNo";
   static const CART = "cart";
   static const USER_ID = "userId";
   static const TOTAL = "total";
@@ -11,6 +13,8 @@ class OrderModel {
 
   String _id;
   String _description;
+  String _address;
+  String _phoneNo;
   String _userId;
   String _status;
   int _createdAt;
@@ -23,6 +27,10 @@ class OrderModel {
 
   String get description => _description;
 
+  String get address => _address;
+
+  String get phoneNo => _phoneNo;
+
   String get userId => _userId;
 
   String get status => _status;
@@ -34,13 +42,18 @@ class OrderModel {
   // public variable
   List get cart => _cart;
 
+
+
   OrderModel.fromSnapshot(DocumentSnapshot snapshot) {
-    _id = snapshot.data()[ID];
-    _description = snapshot.data()[DESCRIPTION];
-    _total = snapshot.data()[TOTAL];
-    _status = snapshot.data()[STATUS];
-    _userId = snapshot.data()[USER_ID];
-    _createdAt = snapshot.data()[CREATED_AT];
-    _cart = snapshot.data()[CART] ?? [];
+    Map<String, dynamic> data = snapshot.data();
+    _id = data[ID];
+    _description = data[DESCRIPTION];
+    _address = data[ADDRESS] ?? "";
+    _phoneNo = data[PHONENO] ?? "";
+    _total = data[TOTAL];
+    _status = data[STATUS];
+    _userId = data[USER_ID];
+    _createdAt = data[CREATED_AT];
+    _cart = data[CART] ?? [];
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:as_solar_sales/models/address.dart';
 import 'package:as_solar_sales/models/cart_item.dart';
 import 'package:as_solar_sales/models/order.dart';
 import 'package:as_solar_sales/models/product.dart';
@@ -121,6 +122,8 @@ class UserProvider with ChangeNotifier {
         _userServices.createUser({
           'name': name,
           'email': email,
+          'address': "",
+          'phoneNo': "",
           'uid': user.user.uid,
           'paystackId': null,
           'stripeId': null,
@@ -238,6 +241,45 @@ class UserProvider with ChangeNotifier {
       return false;
     }
 
+  }
+
+  Future<bool> addToAddress({String address}) async {
+    try {
+      var uuid = Uuid();
+      String addressId = uuid.v4();
+      List<AddressModel> addresses = _userModel.addresses;
+
+      Map addressMap = {
+        "id": addressId,
+        "address": address,
+      };
+
+      AddressModel item = AddressModel.fromMap(addressMap);
+//      if(!itemExists){
+      print("Addresses ARE: ${addresses.toString()}");
+      _userServices.addToAddress(userId: _user.uid, addressModel: item);
+//      }
+
+      return true;
+    } catch (e) {
+      print("THE ERROR ${e.toString()}");
+      return false;
+    }
+  }
+
+  Future<bool> addAddress({String address, String phoneNo}) async {
+    try {
+      _userServices.updateDetails({
+        "uid": _user.uid,
+        "address": address,
+        "phoneNo": phoneNo
+      });
+
+      return true;
+    } catch (e) {
+      print("THE ERROR ${e.toString()}");
+      return false;
+    }
   }
 
   getOrders()async{

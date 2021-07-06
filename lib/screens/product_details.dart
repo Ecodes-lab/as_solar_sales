@@ -4,9 +4,11 @@ import 'package:as_solar_sales/models/product.dart';
 import 'package:as_solar_sales/provider/app.dart';
 import 'package:as_solar_sales/provider/user.dart';
 import 'package:as_solar_sales/screens/cart.dart';
+import 'package:as_solar_sales/screens/review.dart';
 import 'package:as_solar_sales/services/partner.dart';
 import 'package:as_solar_sales/widgets/custom_text.dart';
 import 'package:as_solar_sales/widgets/loading.dart';
+import 'package:badges/badges.dart';
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -220,12 +222,42 @@ class _ProductDetailsState extends State<ProductDetails> {
                           padding: const EdgeInsets.all(4),
                           child: Card(
                             elevation: 10,
-                            color: Colors.orange[700],
+                            color: Colors.green[700],
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20)),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: Icon(Icons.shopping_cart, color: Colors.white,),
+                            ),
+                          )),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 0,
+                  top: 50,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: InkWell(
+                      onTap: () {
+                        changeScreen(context, ReviewScreen(product: widget.product,));
+                      },
+                      child: Padding(
+                          padding: const EdgeInsets.all(4),
+                          child: Card(
+                            elevation: 10,
+                            color: Colors.orange[700],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Badge(
+                                // padding: EdgeInsets.all(8),
+                                position: BadgePosition.topEnd(top: -18, end: -10),
+                                badgeColor: Colors.green[700],
+                                badgeContent: Text('5', style: TextStyle(color: Colors.white),),
+                                child: Icon(Icons.comment, color: Colors.white,)
+                              ),
                             ),
                           )),
                     ),
@@ -309,51 +341,6 @@ class _ProductDetailsState extends State<ProductDetails> {
                     //     ],
                     //   ),
                     // ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
-                      child: Row(
-                        children: <Widget>[
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(
-                              "Size:",
-                              style: GoogleFonts.lato(textStyle: TextStyle(
-                                  color: black,
-                                  fontWeight: FontWeight.normal,
-                                  fontSize: 18
-                                ),
-                              )
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: Text(widget.product.size, style: GoogleFonts.lato(textStyle: TextStyle(
-                                color: Colors.orange[900],
-                                fontWeight: FontWeight.w600,
-                                fontSize: 18
-                            ),
-                            )),
-                            // child: DropdownButton<String>(
-                            //     value: _size,
-                            //     style: TextStyle(color: white),
-                            //     items: widget.product.size
-                            //         .map<DropdownMenuItem<String>>(
-                            //             (value) => DropdownMenuItem(
-                            //                 value: value,
-                            //                 child: CustomText(
-                            //                   text: value,
-                            //                   color: red,
-                            //                 )))
-                            //         .toList(),
-                            //     onChanged: (value) {
-                            //       setState(() {
-                            //         _size = value;
-                            //       });
-                            //     }),
-                          )
-                        ],
-                      ),
-                    ),
                     Expanded(
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
@@ -363,6 +350,51 @@ class _ProductDetailsState extends State<ProductDetails> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
+                                Padding(
+                                  padding: const EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 10.0),
+                                  child: Row(
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                                        child: Text(
+                                            "Size:",
+                                            style: GoogleFonts.lato(textStyle: TextStyle(
+                                                color: black,
+                                                fontWeight: FontWeight.normal,
+                                                fontSize: 18
+                                            ),
+                                            )
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                                        child: Text(widget.product.size, style: GoogleFonts.lato(textStyle: TextStyle(
+                                            color: Colors.orange[900],
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 18
+                                        ),
+                                        )),
+                                        // child: DropdownButton<String>(
+                                        //     value: _size,
+                                        //     style: TextStyle(color: white),
+                                        //     items: widget.product.size
+                                        //         .map<DropdownMenuItem<String>>(
+                                        //             (value) => DropdownMenuItem(
+                                        //                 value: value,
+                                        //                 child: CustomText(
+                                        //                   text: value,
+                                        //                   color: red,
+                                        //                 )))
+                                        //         .toList(),
+                                        //     onChanged: (value) {
+                                        //       setState(() {
+                                        //         _size = value;
+                                        //       });
+                                        //     }),
+                                      )
+                                    ],
+                                  ),
+                                ),
                                 Padding(
                                   padding: const EdgeInsets.symmetric(horizontal: 8),
                                   child: Text(
@@ -406,8 +438,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                           elevation: 0.0,
                           child: MaterialButton(
                             onPressed: () async {
-                              print(widget.product.franchise);
-                              if (widget.product.franchise == 0 && widget.product.ibo == 0 && widget.product.agent == 0) {
+                              // print(widget.product.franchise);
+                              // if (widget.product.franchise == 0 && widget.product.ibo == 0 && widget.product.agent == 0) {
 
                                 appProvider.changeIsLoading();
                                 bool success = await userProvider.addToCart(
@@ -425,9 +457,9 @@ class _ProductDetailsState extends State<ProductDetails> {
                                   appProvider.changeIsLoading();
                                   return;
                                 }
-                              } else {
-                                _partnerAlert(context, userProvider, appProvider);
-                              }
+                              // } else {
+                              //   _partnerAlert(context, userProvider, appProvider);
+                              // }
                             },
                             minWidth: MediaQuery.of(context).size.width,
                             child: appProvider.isLoading
@@ -444,9 +476,9 @@ class _ProductDetailsState extends State<ProductDetails> {
 
                           )),
                     ),
-                    SizedBox(
-                      height: 20,
-                    )
+                    // SizedBox(
+                    //   height: 20,
+                    // )
                   ],
                 ),
               ),
@@ -597,7 +629,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                       "IBO": widget.product.ibo,
                       "Agent": widget.product.agent
                     };
-                    if (e.data()["partner"] == partnerController.text && e.data()["code"] == partnerCodeController.text) {
+                    if (e.get("partner") == partnerController.text && e.get("code") == partnerCodeController.text) {
                       // print(e.data()["partner"]);
                       appProvider.changeIsLoading();
                       bool success = await userProvider.addToCart(

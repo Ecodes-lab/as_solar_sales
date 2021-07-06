@@ -4,6 +4,7 @@ import 'package:as_solar_sales/provider/app.dart';
 import 'package:as_solar_sales/provider/product.dart';
 import 'package:as_solar_sales/provider/user.dart';
 import 'package:as_solar_sales/screens/category.dart';
+import 'package:as_solar_sales/screens/login.dart';
 import 'package:as_solar_sales/screens/product_search.dart';
 import 'package:as_solar_sales/screens/test_credit_card.dart';
 import 'package:as_solar_sales/services/product.dart';
@@ -152,19 +153,21 @@ class _ProductPageState extends State<ProductPage> {
             //   },
             // ),
 
-            ListTile(
-              onTap: () {
-                userProvider.signOut();
-              },
-              leading: Icon(Icons.exit_to_app),
-              title: Text(
-                "LOGOUT",
-                style: GoogleFonts.lato(textStyle: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 17
-                )),
-              ),
-            ),
+            // ListTile(
+            //   onTap: () {
+            //     userProvider.signOut();
+            //     // changeScreen(context, Login());
+            //     // Navigator.pop(context, Login());
+            //   },
+            //   leading: Icon(Icons.exit_to_app),
+            //   title: Text(
+            //     "LOGOUT",
+            //     style: GoogleFonts.lato(textStyle: TextStyle(
+            //         fontWeight: FontWeight.w400,
+            //         fontSize: 17
+            //     )),
+            //   ),
+            // ),
           ],
         ),
       ),

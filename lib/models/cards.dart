@@ -21,11 +21,12 @@ class CardModel{
   int get last4 => _last4;
 
   CardModel.fromSnapshot(DocumentSnapshot snapshot){
-    _id = snapshot.data()[ID];
-    _userId = snapshot.data()[USER_ID];
-    _month = snapshot.data()[MONTH];
-    _year = snapshot.data()[YEAR];
-    _last4 = snapshot.data()[LAST_FOUR];
+    Map<String, dynamic> data = snapshot.data();
+    _id = data[ID];
+    _userId = data[USER_ID];
+    _month = data[MONTH];
+    _year = data[YEAR];
+    _last4 = data[LAST_FOUR];
   }
 
   CardModel.fromMap(Map data, {String customerId}){

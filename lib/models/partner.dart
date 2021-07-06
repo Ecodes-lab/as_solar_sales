@@ -17,8 +17,9 @@ class PartnerModel {
   String get code => _code;
 
   PartnerModel.fromSnapshot(DocumentSnapshot snapshot) {
-    // _id = snapshot.data()[ID];
-    _partner = snapshot.data()[PARTNER];
-    _code = snapshot.data()[CODE];
+    Map<String, dynamic> data = snapshot.data();
+    // _id = snapshot.get(ID];
+    _partner = data[PARTNER];
+    _code = data[CODE];
   }
 }
