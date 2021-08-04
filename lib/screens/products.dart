@@ -13,6 +13,7 @@ import 'package:as_solar_sales/widgets/custom_text.dart';
 import 'package:as_solar_sales/widgets/featured_products.dart';
 import 'package:as_solar_sales/widgets/product_card.dart';
 import 'package:as_solar_sales/widgets/search.dart';
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -198,7 +199,13 @@ class _ProductPageState extends State<ProductPage> {
                           onTap: (){
                             changeScreen(context, CartScreen());
                           },
-                          child: Icon(Icons.shopping_cart, color: Colors.green[700],))),
+                          child: Badge(
+                            // padding: EdgeInsets.all(8),
+                              position: BadgePosition.topEnd(top: -10, end: -8),
+                              badgeColor: Colors.orange[700],
+                              badgeContent: Text('${userProvider.userModel.cart.length}', style: TextStyle(color: Colors.white),),
+                              child: Icon(Icons.shopping_cart, color: Colors.green[700],)
+                          ),)),
                 ),
                 Positioned(
                   top: 10,

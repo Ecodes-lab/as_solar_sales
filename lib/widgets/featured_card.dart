@@ -1,10 +1,12 @@
 import 'package:as_solar_sales/helpers/common.dart';
 import 'package:as_solar_sales/helpers/style.dart';
 import 'package:as_solar_sales/models/product.dart';
+import 'package:as_solar_sales/provider/product.dart';
 import 'package:as_solar_sales/screens/product_details.dart';
 import 'package:as_solar_sales/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class FeaturedCard extends StatelessWidget {
@@ -15,10 +17,12 @@ class FeaturedCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productProvider = Provider.of<ProductProvider>(context);
     return Padding(
       padding: EdgeInsets.all(4),
       child: InkWell(
-        onTap: (){
+        onTap: () async {
+          await productProvider.loadReviews(product.id);
           changeScreen(context, ProductDetails(product: product,));
         },
         child: Container(

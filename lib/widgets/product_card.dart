@@ -1,10 +1,12 @@
 import 'package:as_solar_sales/helpers/common.dart';
 import 'package:as_solar_sales/helpers/style.dart';
 import 'package:as_solar_sales/models/product.dart';
+import 'package:as_solar_sales/provider/product.dart';
 import 'package:as_solar_sales/screens/product_details.dart';
 import 'package:as_solar_sales/widgets/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 import 'loading.dart';
@@ -16,10 +18,12 @@ class ProductCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final productProvider = Provider.of<ProductProvider>(context);
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: GestureDetector(
-        onTap: (){
+        onTap: () async {
+          await productProvider.loadReviews(product.id);
           changeScreen(context, ProductDetails(product: product,));
         },
         child: Container(

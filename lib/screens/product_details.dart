@@ -2,6 +2,7 @@ import 'package:as_solar_sales/helpers/common.dart';
 import 'package:as_solar_sales/helpers/style.dart';
 import 'package:as_solar_sales/models/product.dart';
 import 'package:as_solar_sales/provider/app.dart';
+import 'package:as_solar_sales/provider/product.dart';
 import 'package:as_solar_sales/provider/user.dart';
 import 'package:as_solar_sales/screens/cart.dart';
 import 'package:as_solar_sales/screens/review.dart';
@@ -52,6 +53,7 @@ class _ProductDetailsState extends State<ProductDetails> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
     final appProvider = Provider.of<AppProvider>(context);
+    final productProvider = Provider.of<ProductProvider>(context);
 
     return Scaffold(
       key: _key,
@@ -227,7 +229,13 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 borderRadius: BorderRadius.circular(20)),
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: Icon(Icons.shopping_cart, color: Colors.white,),
+                              child: Badge(
+                                // padding: EdgeInsets.all(8),
+                                  position: BadgePosition.topEnd(top: -18, end: -10),
+                                  badgeColor: Colors.orange[700],
+                                  badgeContent: Text('${userProvider.userModel.cart.length}', style: TextStyle(color: Colors.white),),
+                                  child: Icon(Icons.shopping_cart, color: Colors.white,)
+                              ),
                             ),
                           )),
                     ),
@@ -239,7 +247,8 @@ class _ProductDetailsState extends State<ProductDetails> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: InkWell(
-                      onTap: () {
+                      onTap: () async {
+                        // await productProvider.loadReviews(widget.product.id);
                         changeScreen(context, ReviewScreen(product: widget.product,));
                       },
                       child: Padding(
@@ -255,7 +264,7 @@ class _ProductDetailsState extends State<ProductDetails> {
                                 // padding: EdgeInsets.all(8),
                                 position: BadgePosition.topEnd(top: -18, end: -10),
                                 badgeColor: Colors.green[700],
-                                badgeContent: Text('5', style: TextStyle(color: Colors.white),),
+                                badgeContent: Text('${productProvider.approvedReviews.length}', style: TextStyle(color: Colors.white),),
                                 child: Icon(Icons.comment, color: Colors.white,)
                               ),
                             ),

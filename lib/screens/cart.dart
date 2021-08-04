@@ -281,7 +281,7 @@ class _CartScreenState extends State<CartScreen> {
                               style: GoogleFonts.lato(textStyle: TextStyle(
                                   color: Colors.white,
                                   fontWeight: FontWeight.normal,
-                                  fontSize: 20),
+                                  fontSize: MediaQuery.of(context).size.width/20),
                               ),
                             )),
                       ),
@@ -627,7 +627,7 @@ class _CartScreenState extends State<CartScreen> {
                             style: GoogleFonts.lato(textStyle: TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.normal,
-                                fontSize: 20),
+                                fontSize: MediaQuery.of(context).size.width/20),
                             ),
                           )),
                     ),
