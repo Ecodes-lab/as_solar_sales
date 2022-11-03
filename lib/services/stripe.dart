@@ -12,8 +12,8 @@ import 'order.dart';
 
 
 class StripeServices{
-  static const PUBLISHABLE_KEY = "pk_test_51I8WADBiMnVsZjlccOlsv7rai1KtQy3qWckoJ9GrOD5uTpczIj60fg822vWttN9602HXLXVVE7oxhhzKYCPvYDAo00B1hcR7KT";
-  static const SECRET_KEY = "sk_test_51I8WADBiMnVsZjlcqHLMk16Xe66qX2VhJroQqsKi0WmdpCygqeXm93zQl54jeQGPn4pGuY3vzokrY4Jnd9Mof2Le00PyTkRZBc";
+  static const PUBLISHABLE_KEY = "[PUBLISHABLE_KEY]";
+  static const SECRET_KEY = "[SECRET_KEY]";
   static const PAYMENT_METHOD_URL = "https://api.stripe.com/v1/payment_methods";
   static const CUSTOMERS_URL = "https://api.stripe.com/v1/customers";
   static const CHARGE_URL = "https://api.stripe.com/v1/charges";
