@@ -13,8 +13,8 @@ import 'order.dart';
 
 
 class PaystackServices{
-  static const PUBLISHABLE_KEY = "pk_test_bd6dfd236bb9176e980f575121f89c5337fad6ca";
-  static const SECRET_KEY = "sk_test_566f7ff3cc84bbe718d6f40a6871e4f185a64452";
+  static const PUBLISHABLE_KEY = "[PUBLISHABLE_KEY]";
+  static const SECRET_KEY = "[SECRET_KEY]";
   static const PAYMENT_METHOD_URL = "https://api.stripe.com/v1/payment_methods";
   static const CUSTOMERS_URL = "https://api.paystack.co/customer";
   static const CHARGE_URL = "https://api.paystack.co/charge";
@@ -110,12 +110,12 @@ class PaystackServices{
       //   ]
       // },
       "card":{
-        "cvv":"408",
-        "number":"4084084084084081",
-        "expiry_month":"01",
-        "expiry_year":"99"
+        "cvv":"[CVV]",
+        "number":"[CARD_NUMBER]",
+        "expiry_month":"[EXP_MONTH]",
+        "expiry_year":"[EXP_YEAR]"
       },
-      "pin":"0000"
+      "pin":"[PIN]"
 
     };
     try{
